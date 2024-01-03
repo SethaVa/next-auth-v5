@@ -1,10 +1,9 @@
-import NextAuth, { DefaultSession } from "next-auth";
-import GitHub from "next-auth/providers/github";
+import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
-import { PrismaClient, UserRole } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import db from "@/lib/db";
-import { getUserById } from "./data/user";
+import { getUserById } from "@/data/user";
 
 export const {
   handlers: { GET, POST },
@@ -12,6 +11,22 @@ export const {
   signOut,
   signIn,
 } = NextAuth({
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error",
+  },
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          emailVerified: new Date(),
+        },
+      });
+    },
+  },
   callbacks: {
     // async signIn({ user }) {
     //   const existingUser = await getUserById(user.id);
