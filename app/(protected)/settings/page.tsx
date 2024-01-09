@@ -77,7 +77,7 @@ const SettingPage = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form className="space-y-6" onClick={form.handleSubmit(onSubmit)}>
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -172,9 +172,7 @@ const SettingPage = () => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a role">
-                            {" "}
-                          </SelectValue>
+                          <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -208,8 +206,9 @@ const SettingPage = () => {
                 )}
               ></FormField>
             </div>
-            <FormError message={error} />
-            <FormSuccess message={success} />
+            {!success && <FormError message={error} />}
+            {success && <FormSuccess message={success} />}
+
             <Button type="submit">Save</Button>
           </form>
         </Form>
