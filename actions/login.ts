@@ -10,7 +10,7 @@ import {
   generateVerificationToken,
 } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
-import { sendTwoFactorEmail, sendVerificationEmail } from "@/lib/mail";
+import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor";
 import db from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
@@ -86,7 +86,7 @@ export const login = async (
     } else {
       const twoFactorToken = await generateTwoFactorToken(existingUser.email);
 
-      await sendTwoFactorEmail(twoFactorToken.email, twoFactorToken.token);
+      await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
 
       return { twoFactor: true };
     }
